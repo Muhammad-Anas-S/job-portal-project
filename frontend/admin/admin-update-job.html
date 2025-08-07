@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Job</title>
+    <style>
+        body{
+            background-color: #000000d7;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            margin-top: 4px;
+            height: 95vh;
+            font-size: 14px;
+        }
+
+        h2{
+            text-align: center;
+            margin-top: 10px;
+        }
+        .container{
+            margin-top: 10px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+            width: 280px;
+            height: 92vh;
+            border-radius: 15px;
+            background-color: #575f5f91;
+            color: rgba(255, 255, 255, 0.795);
+            padding: 20px;
+        }
+        input{
+            margin-top: 5px;
+            width: 90%;
+            color: rgba(255, 255, 255, 0.884);
+            padding: 10px;
+            background-color: #4b4848dc;
+            border-radius: 6px;
+            height: 20px;
+        }
+
+        input:hover{
+            border: 0.5px solid white;
+        }
+
+        textarea{
+            background-color: #4b4848dc;
+            margin-top: 5px;
+            width: 100%;
+            color: rgba(255, 255, 255, 0.884);
+            border-radius: 6px;
+            height: 50px;
+        }
+
+        textarea:hover{
+            border: 1px solid rgba(255, 255, 255, 0.842);
+        }
+
+        button{
+            width: 35%;
+            color:white;
+            border: none;
+            background-color: #00A884;
+            height: 30px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .btn{
+            text-align: center;
+        }
+
+        .cancel-btn{
+            background-color: transparent;
+            cursor: pointer;
+            border: none;
+            width: 30px;
+            padding: 0px;
+        }
+
+        .error{
+            color: red;
+            font-size: 12px;
+            min-height: 16px;
+            margin-top: 5px;
+            margin-bottom: 8px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+<button class="cancel-btn" onclick="cancel()" title="Cancel"><img src="images/cancel.png" width="30" height="30"></button>
+
+    <h2>Update Job</h2>
+    <form id="updateForm">
+        <label>Job ID:</label><br>
+        <input type="number" id="jobId" placeholder="Enter job ID">
+        <span class="error" id="IDError"></span>
+
+        <label>Title:</label><br>
+        <input type="text" id="title" placeholder="Enter title">
+        <span class="error" id="TitleError"></span>
+
+        <label>Description:</label><br>
+        <textarea id="description" placeholder="Enter job description"></textarea>
+        <span class="error" id="DescriptionError"></span>
+
+        <label>Company Name:</label><br>
+        <input type="text" id="companyName" placeholder="Enter company name">
+        <span class="error" id="CompanyNameError"></span>
+
+        <label>Location:</label><br>
+        <input type="text" id="location" placeholder="Enter location">
+        <span class="error" id="LocationError"></span>
+
+        <div class="btn">
+            <button type="button" onclick="updateJob()">Update</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function updateJob() {
+        // Clear previous errors
+        document.getElementById("IDError").textContent = "";
+        document.getElementById("TitleError").textContent = "";
+        document.getElementById("DescriptionError").textContent = "";
+        document.getElementById("CompanyNameError").textContent = "";
+        document.getElementById("LocationError").textContent = "";
+
+        let isValid = true;
+
+        const jobId = document.getElementById("jobId").value.trim();
+        const title = document.getElementById("title").value.trim();
+        const description = document.getElementById("description").value.trim();
+        const companyName = document.getElementById("companyName").value.trim();
+        const location = document.getElementById("location").value.trim();
+
+        if (!jobId) { document.getElementById("IDError").textContent = "* ID is required"; isValid = false; }
+        if (!title) { document.getElementById("TitleError").textContent = "* Title is required"; isValid = false; }
+        if (!description) { document.getElementById("DescriptionError").textContent = "* Description is required"; isValid = false; }
+        if (!companyName) { document.getElementById("CompanyNameError").textContent = "* Company Name is required"; isValid = false; }
+        if (!location) { document.getElementById("LocationError").textContent = "* Location is required"; isValid = false; }
+
+        if (!isValid) return;
+
+        if (!confirm("Are you sure you want to update this job?")) {
+            return;
+        }
+
+        const job = { jobId, title, description, companyName, location };
+
+        fetch(`http://localhost:8080/jobs/update/${jobId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(job)
+        })
+        .then(response => 
+        {
+            if(response.status==404){
+                document.getElementById("IDError").textContent="Job ID not found";
+                throw new Error("Job ID not found");
+            }
+            return response.text();
+        })
+        .then(() => {
+            alert("Job Updated Successfully!");
+            window.location.href = "./admin-dashboard.html";
+        })
+        .catch(err => console.error(err));
+    }
+
+    function cancel() {
+        window.location.href="admin-view-jobs.html";
+    }
+</script>
+</body>
+</html>

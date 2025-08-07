@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Registration</title>
+    <style>
+        body
+        {
+            background-color: #000000d7;
+            font-family: Arial, Helvetica, sans-serif;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            display: flex;
+            margin: 0;
+        }
+        .container
+        {
+            background-color: #575f5f91;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+            align-items: center;
+            padding: 30px;
+            color: white;
+            border-radius: 15px;
+            width: 300px;
+        }
+        h2{
+            margin-bottom: 20px;
+            width: 300px;
+            color: rgba(255, 255, 255, 0.966);
+        }
+        input, select, button{
+            width: 100%;
+            padding: 10px;
+            color: white;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+        }
+        button{
+            border-radius: 20px;
+        }
+
+        input{
+            background-color: #4b4848dc;
+            width: 92%;
+        }
+
+        select{
+            background-color: #4b4848dc;
+        }
+        #role
+        {
+            font-size: 15px;
+        }
+        button{
+            background-color: #00A884;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.3);
+        }
+        button:hover{
+            background-color:#026d56;
+        }
+        .error{
+            color: red;
+            font-size: 12px;
+            height: 16px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        a{
+            color: #00A884;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<h2 align="center">User Register</h2>
+
+<form id="registerForm">
+    <label>Username:</label>
+    <input type="text" id="username" placeholder="Enter your username" required>
+    <span class="error" id="UserNameError"></span>
+
+    <label>Password:</label>
+    <input type="password" id="password" placeholder="Enter your password" required>
+    <span class="error" id="PasswordError"></span>
+
+    <label>What's your role:</label>
+    <select id="role" required>
+        <option value="">Select Role</option>
+        <option value="ADMIN">Admin</option>
+        <option value="CANDIDATE">Candidate</option>
+    </select>
+    <span class="error" id="RoleError"></span>
+
+
+    <button type="button" onclick="register()">Register</button>
+    <button type="button" onclick="goToHomePage()">Back</button><br>
+    <p align="center">Already you registered ? <a href="user-login.html">sign in</a></p>
+
+</form>
+
+<p id="message"></p>
+
+</div>
+
+<script>
+    function register() {
+
+        document.getElementById("UserNameError").innerText="";
+        document.getElementById("PasswordError").innerText="";
+        document.getElementById("RoleError").innerText="";
+
+        let isValid=true;
+
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const role = document.getElementById("role").value;
+
+        if(!username){
+           document.getElementById("UserNameError").innerText="*Username is required";
+           isValid=false;
+        }
+        if(!password){
+           document.getElementById("PasswordError").innerText="*Password is required";
+           isValid=false;
+        }
+        if(!role){
+           document.getElementById("RoleError").innerText="*Please select a role";
+           isValid=false;
+        }
+
+        if(!isValid) return;
+
+        const user={username, password, role};
+
+        fetch("http://localhost:8080/user/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(user)
+        })
+        .then(response => response.text())
+        .then(msg => {
+            alert(msg);
+
+            window.location.href="user-login.html";
+        })
+        .catch(err => console.error(err));
+    }
+    function goToHomePage()
+    {
+        window.location.href="home.html";
+    }
+</script>
+
+</body>
+</html>

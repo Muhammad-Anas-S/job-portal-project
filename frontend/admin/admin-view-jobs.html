@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Jobs</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #000000d7;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        pre{
+            color: white;
+            font-size: 50px;
+            text-align: center;
+            margin-left: 1000px;
+        }
+
+        h1 {
+            margin-top: 40px;
+            color: #ffffff;
+        }
+
+        .jobs-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 120px;
+            padding: 30px;
+            justify-items: center;
+        }
+
+        .job-card {
+            background-color: #575f5f91;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.747);
+            border-radius: 12px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            color: rgba(255, 255, 255, 0.795);
+            max-width: 300px;
+            text-align: left;
+        }
+
+        .job-card p {
+            margin: 5px 0;
+        }
+
+        .job-card button {
+            border: none;
+            height: 35px;
+            width: 100%;
+            border-radius: 8px;
+            background-color: #00A884;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .job-card button:hover {
+            background-color:#026d56;
+        }
+
+        .back-button{
+            position: absolute;
+            left: 20px;
+            top: 30px;
+            background-color:transparent;
+            border: 1px solid white;
+            border-radius: 8px;
+            width: 50px;
+            height: 50px;
+            margin-left: 30px;
+        }
+
+        .back-button:hover{
+            background-color: #8c8d8d86;
+        }
+
+        .add-btn{
+            background-color: transparent;
+            border: 1px solid white;
+            border-radius: 8px;
+            width: 50px;
+            cursor: pointer;
+            height: 50px;
+        }
+
+        .add-btn:hover{
+            background-color: #8c8d8d86;
+        }
+
+        .edit-btn{
+            background-color: transparent;
+            border: 1px solid white;
+            border-radius: 8px;
+            width: 50px;
+            cursor: pointer;
+            height: 50px;
+        }
+
+        .edit-btn:hover{
+            background-color: #8c8d8d86;
+        }
+
+        .del-btn{
+            background-color: transparent;
+            border: 1px solid white;
+            border-radius: 8px;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+        }
+
+        .del-btn:hover{
+            background-color: #c00c0c;
+        }
+
+        .right{
+            margin-right: 30px;
+        }
+
+        .main-icons{
+            text-align: right;
+            margin-right: 55px;
+            margin-top: 20px;
+        }
+
+        .line{
+            width: 92%;
+            margin-top: 40px;
+            margin-left: 50px;
+            text-align: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="back()" title="Back"><img src="images/back.png" width="30" height="30"></button> 
+    <h1>All Jobs List</h1>
+    <div class="main-icons">
+    <button class="add-btn" onclick="addJob()" title="Add new job"><img src="images/add.png" width="30" height="30"></button> 
+    <button class="edit-btn" onclick="editJob()" title="Edit"><img src="images/edit.png" width="30" height="30"></button> 
+    <button class="del-btn" onclick="deleteJob()" title="Delete"><img src="images/delete.png" width=30 height=30></button>
+    </div>
+    <div class="jobs-container" id="jobsList"></div>
+    
+
+    <script>
+    fetch("http://localhost:8080/jobs/getAll")
+        .then(response => response.json())
+        .then(jobs => {
+            const list = document.getElementById("jobsList");
+            list.innerHTML = ""; // clear old
+
+            if (!jobs || jobs.length === 0) {
+                list.innerHTML = "<pre>No jobs available.</pre>";
+                return;
+            }
+
+            jobs.forEach(job => {
+                const jobItem = `
+                    <div class="job-card">
+                        <p><strong>Job ID:</strong> ${job.jobId}</p>
+                        <p><strong>Title:</strong> ${job.title}</p>
+                        <p><strong>Description:</strong> ${job.description}</p>
+                        <p><strong>Company Name:</strong> ${job.companyName}</p>
+                        <p><strong>Location:</strong> ${job.location}</p>
+                        <p><strong>Posted Date:</strong> ${job.postedDate}</p>
+                        <button onclick="applyForJob(${job.jobId})">Apply Now</button>
+                    </div>
+                `;
+                list.innerHTML += jobItem;
+            });
+        })
+        .catch(err => console.error("Error fetching jobs:", err));
+
+    function applyForJob(jobId) {
+        window.location.href = `admin-apply-jobs.html?jobId=${jobId}`;
+    }
+
+    function back() {
+        window.location.href = "./admin-dashboard.html";
+    }
+    function deleteJob() {
+        window.location.href = "admin-delete-job.html";
+    }
+    function editJob() {
+        window.location.href = "admin-update-job.html";
+    }
+    function addJob(){
+        window.location.href="admin-add-job.html";
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Candidate Dashboard</title>
+</head>
+<style>
+    body{
+        background-color: #000000d7;
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        position: relative;
+    }
+    h1{
+        margin-top: 30px;
+        color:#ffffff;
+        text-align: center;
+    }
+    .dashboard{
+            color: rgba(255, 255, 255, 0.795);
+            width: 1000px;
+            background-color: #575f5f91;
+            height: 80px;
+            margin-top: 140px;
+            display: flex;
+            justify-content: space-between;
+            border: 1px solid rgba(255, 255, 255, 0.637);
+            padding: 20px;
+            font-size: 30px;
+            align-items: center;
+            font-weight: normal;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+    }
+    .dashboard:hover{
+            background-color:#026d56;
+        transform: translateY(-5px);
+    }
+    .logout-btn{
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background-color: #FF6B6B;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .logout-btn:hover{
+        background-color: #d63f3f;
+    }
+
+    .top{
+        background-color: #00A884;
+        width: 100%;
+        height: 15vh;
+    }
+
+    .box{
+            color: rgba(255, 255, 255, 0.795);
+            width: 1000px;
+            background-color: #575f5f91;
+            height: 80px;
+            margin-top: 180px;
+            display: flex;
+            justify-content: space-between;
+            border: 1px solid rgba(255, 255, 255, 0.637);
+            padding: 20px;
+            font-size: 30px;
+            align-items: center;
+            font-weight: normal;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;    
+        }
+    .box:hover {
+            background-color:#6d7272a4;
+            transform: translateY(-5px);
+        }
+
+    button{
+            background-color: #00A884;
+            border: none;
+            width: 100px;
+            height: 35px;
+            font-size: 16px;
+            cursor: pointer;
+            color: white;
+            border-radius: 20px;
+        }
+
+        button:hover{
+            background-color: #026d56;
+        }
+
+
+</style>
+<body>
+    <div class="top">
+        <h1>Welcome, Candidate</h1>
+    </div>
+    <div class="box"><span>View Jobs & Apply </span><button onclick="goToViewJobs()">view</button></div>
+    <button class="logout-btn" onclick="goToLogOut()">Log out</button>
+
+    <script>
+        function goToViewJobs()
+        {
+            window.location.href="candidate-view-jobs.html";
+        }
+        function goToLogOut()
+        {
+            localStorage.clear();
+            window.location.href="../home.html";
+        }
+    </script>
+</body>
+</html>

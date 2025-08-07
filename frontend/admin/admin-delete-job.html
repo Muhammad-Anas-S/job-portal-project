@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Job</title>
+    <style>
+        body{
+            background-color: #000000d7;
+            font-family: Arial, Helvetica, sans-serif;
+            justify-content: center;
+            display: flex;
+            margin-top: 170px;
+        }
+
+        .container{
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+            width: 280px;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.795);
+            background-color: #575f5f91;
+            border-radius: 15px;
+        }
+
+        input{
+            width: 50px;
+            height: 50px;
+            padding: 10px;
+            background-color: #4b4848dc;
+            text-align: center;
+            font-size: 20px;
+            color: white;
+            border-radius: 6px;
+        }
+
+        h2{
+            text-align: center;
+        }
+
+        .delete-btn{
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            height: 30px;
+            text-align: center;
+            font-size: 15px;
+            width: 35%;
+
+        }
+
+        .delete-btn:hover{
+            background-color: #be0f0f;
+        }
+        .cancel-btn{
+            background-color: transparent;
+            cursor: pointer;
+            padding: 0px;
+            width: 30px;
+            border: none;
+        }
+
+        .sub-container{
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+<button class="cancel-btn" onclick="cancel()" title="Cancel"><img src="images/cancel.png" width="30" height="30"></button>
+        <div class="sub-container">
+        <h2>Delete Job</h2>
+        <label>Job ID</label><br><br>
+        <input type="number" id="jobId"><br><br>
+        <button class="delete-btn" onclick="deleteJob()">Delete</button>
+        </div>
+
+    </div>
+    
+    <div id="errorMsg"></div>
+
+    <script>
+        function deleteJob()
+        {
+            const jobId=document.getElementById("jobId").value.trim();
+
+            const errorMsg = document.getElementById("errorMsg");
+            errorMsg.textContent="";
+
+            if(!jobId){
+                errorMsg.textContent="* Please enter a job ID.";
+                return;
+            }
+
+            fetch(`http://localhost:8080/jobs/delete/${jobId}`, {
+                method:"DELETE"
+            })
+
+            .then(response => {
+                if(response.ok){
+                    alert("Job Deleted Successfully!")
+                    window.location.href="admin-view-jobs.html";
+                }
+                else{
+                    alert("Job ID not found");       
+                }
+            })
+
+            .catch(err=> {
+                errorMsg.textContent="Error deleting job.";
+                console.error(err);
+            });
+        }
+
+        function cancel()
+        {
+            window.location.href="admin-view-jobs.html";
+        }
+    </script>
+</body>
+</html>

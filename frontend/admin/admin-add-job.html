@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Job</title>
+    <style>
+        body{
+            background-color: #000000d7;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .container
+        {
+            background-color: #575f5f91;
+            color: rgba(255, 255, 255, 0.795);
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+            width: 280px;
+            height: 87vh;
+            padding: 30px;
+            border-radius: 15px;
+        }
+        h2{
+            text-align: center;
+            color: rgba(255, 255, 255, 0.904);
+        }
+        input{
+            width: 95%;
+            background-color: #4b4848dc;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            color: rgba(255, 255, 255, 0.884);
+        }
+
+        input:hover{
+            border: 0.5px solid white;
+        }
+        textarea
+        {
+            background-color: #4b4848dc;
+            width:95%;
+            color: white;
+            border-radius: 6px;
+            margin-top: 10px;
+            padding: 10px;
+        }
+
+        textarea:hover{
+            border: 1px solid rgba(255, 255, 255, 0.842);
+        }
+        .error{
+            color: red;
+            font-size: 12px;
+            height: 16px;
+            margin-bottom: 8px;
+            display: block;
+
+        }
+        .add-btn{
+            border: none;
+            height: 40px;
+            width: 35%;
+            border-radius: 20px;
+            background-color: #00A884;
+            color: white;
+            text-align: center;
+            align-items: center;
+            font-size: 15px;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-ps{
+            text-align: center;
+        }
+        .cancel-btn{
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+<button class="cancel-btn" onclick="cancel()" title="Cancel"><img src="images/cancel.png" width="30" height="30"></button>
+<h2>Add New Job</h2>
+<form id="jobForm">
+    <label class="labelFormat">Title:</label><br/>
+    <input type="text" id="title" placeholder="Enter job title" required><br/>
+    <span class="error" id="TitleError"></span>
+
+    <label>Description:</label><br/>
+    <textarea id="description" placeholder="Enter job description" required></textarea><br/>
+    <span class="error" id="DescriptionError"></span>
+
+    <label>Company:</label><br/>
+    <input type="text" id="companyName" placeholder="Enter company name" required><br/>
+    <span class="error" id="CompanyError"></span>
+
+    <label>Location:</label><br/>
+    <input type="text" id="location" placeholder="Enter location" required><br/>
+    <span class="error" id="LocationError"></span>
+    <div class="btn-ps">
+    <button type="button" class="add-btn" onclick="addJob()">Add</button>
+    </div>
+</form>
+
+<p id="message"></p>
+</div>
+
+<script>
+    function addJob() {
+        document.getElementById("TitleError").innerText="";
+        document.getElementById("DescriptionError").innerText="";
+        document.getElementById("CompanyError").innerText="";
+        document.getElementById("LocationError").innerText="";
+
+        let isValid=true;
+
+        const title = document.getElementById("title").value.trim();
+        const description = document.getElementById("description").value.trim();
+        const companyName = document.getElementById("companyName").value.trim();
+        const location = document.getElementById("location").value.trim();
+
+
+        if(!title){
+           document.getElementById("TitleError").innerText="*Title is required";
+           isValid=false;
+        }
+        if(!description){
+           document.getElementById("DescriptionError").innerText="*Description is required";
+           isValid=false;
+        }
+        if(!companyName){
+           document.getElementById("CompanyError").innerText="*Company Name is required";
+           isValid=false;
+        }
+        if(!location){
+           document.getElementById("LocationError").innerText="*Location is required";
+           isValid=false;
+        }
+
+        if(!isValid) return;
+        const job = {title, description, companyName, location};
+
+        fetch("http://localhost:8080/jobs/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(job)
+        })
+        .then(response => {
+            if(!response.ok){
+                throw new Error("Network error");
+            }
+            return response.text();
+        })
+        .then(msg => {
+            alert(msg);
+            window.location.href="admin-view-jobs.html";
+        })
+        .catch(err => {
+            console.error(err);
+        });
+    }
+    function cancel()
+    {
+        window.location.href="admin-view-jobs.html";
+    }
+</script>
+
+</body>
+</html>

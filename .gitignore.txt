@@ -1,0 +1,21 @@
+# Ignore target folders
+**/target/
+
+# Ignore logs
+*.log
+
+# Ignore IDE files
+*.iml
+*.class
+*.project
+*.settings/
+*.classpath
+.vscode/
+.idea/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore Spring Boot properties file
+backend/src/main/resources/application.properties
